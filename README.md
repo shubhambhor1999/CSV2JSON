@@ -65,7 +65,3 @@ The app will be available at:
 📌 **For a sample CSV file, navigate to the `/success` folder.**
 
 ---
-
-```
-
-```
