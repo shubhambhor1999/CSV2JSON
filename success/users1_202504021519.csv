@@ -1,0 +1,6 @@
+name.firstName,name.lastName,age,address.line1,address.line2,address.city,address.state,gender
+John,Doe,25,123 Main St,Apt 4B,New York,NY,male
+Jane,Smith,30,456 Elm St,Suite 5,Los Angeles,CA,female
+Robert,Brown,45,789 Oak St,Floor 3,Chicago,IL,male
+Emily,Davis,22,321 Pine St,Unit 7B,Houston,TX,female
+Michael,Wilson,55,654 Maple St,Room 201,Phoenix,AZ,male

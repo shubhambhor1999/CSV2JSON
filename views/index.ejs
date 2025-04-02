@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>CSV to JSON Converter</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>CSV to JSON Converter</h1>
+        <form id="uploadForm" enctype="multipart/form-data">
+            <input type="file" id="csvFile" accept=".csv" required>
+            <button type="submit">Upload</button>
+        </form>
+        <button id="convertBtn" disabled>Convert</button>
+        <div id="output"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const uploadForm = document.getElementById('uploadForm');
+            const convertBtn = document.getElementById('convertBtn');
+            const outputDiv = document.getElementById('output');
+            const fileInput = document.getElementById('csvFile');
+
+            uploadForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                if (!fileInput.files.length) return alert("Please select a CSV file!");
+
+                const formData = new FormData();
+                formData.append("file", fileInput.files[0]);
+
+                try {
+                    const response = await fetch('/api/upload', { method: 'POST', body: formData });
+                    const result = await response.json();
+                    if (response.ok) {
+                        convertBtn.disabled = false;
+                        outputDiv.innerHTML = `<p class="success">File uploaded successfully! Click 'Convert' to process.</p>`;
+                    } else {
+                        outputDiv.innerHTML = `<p class="error">Upload failed: ${result.error}</p>`;
+                    }
+                } catch (err) {
+                    console.error(err);
+                    outputDiv.innerHTML = `<p class="error">Error uploading file.</p>`;
+                }
+            });
+
+            convertBtn.addEventListener('click', async () => {
+                convertBtn.disabled = true;
+                outputDiv.innerHTML = `<p class="info">Processing file...</p>`;
+
+                try {
+                    const response = await fetch('/api/process', { method: 'GET' });
+                    const result = await response.json();
+                    if (response.ok) {
+                        outputDiv.innerHTML = `<p class="success">${result.message}</p>`;
+                    } else {
+                        outputDiv.innerHTML = `<p class="error">Error processing file.</p>`;
+                    }
+                    fileInput.value = "";
+                    convertBtn.disabled = true;
+                } catch (err) {
+                    console.error(err);
+                    outputDiv.innerHTML = `<p class="error">Error processing file.</p>`;
+                    convertBtn.disabled = false; // Enable button if processing failed
+                }
+            });
+        });
+    </script>
+</body>
+</html>
